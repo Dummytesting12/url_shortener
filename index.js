@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-mongoose.connect('mongodb://localhost:27017/myreport');
+mongoose.connect( 'mongodb://localhost:27017/urlshort' );
 mongoose.connection
         .once('open',() =>{
             console.log("connected mongoose");
@@ -27,16 +27,13 @@ mongoose.connection
 
 app.get('/', async(req,res)=>{
     try{
-        const shortURL = await db.find()// ({short_url : req.params.show})
+        const shortURLyh = await db.find()// ({short_url : req.params.show})
 
-        if(shortURL == null)
+        if(shortURLyh == null)
             return res.status(404).json('not found');
         else{
-            console.log(shortURL);
-            res.status(200).json({
-                longurl : db.shorturl,
-                shorturl : db.shorturl
-            });
+            console.log(shortURLyh);
+            res.status(200).json("done in console");
         }
     }
     catch(err){
@@ -45,13 +42,30 @@ app.get('/', async(req,res)=>{
 
 });
 
+app.get('/:short', async(req,res) =>{
+    try{
+        const weget = await db.findOne({shorturl :req.params.short})
+        if(weget == null){
+            return res.status(400).json('not found');
+        }else{
+            console.log(weget);
+            res.status(200).json({
+                longurl : weget.longurl,
+                shorturl : weget.shorturl 
+            });
+        }
+    }catch(err){
+        console.log(err);
+    }
+});
+
+
 app.post('/short', async(req,res) =>{
     const random = shortid.generate().toString();
-    //  console.log(req.body.long_url);
+      console.log(random);
     await  db.create({
         longurl : req.body.longurl,
         shorturl : random
-        
     })
     //console.log(db.long_url);
     
