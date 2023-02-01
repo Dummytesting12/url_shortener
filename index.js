@@ -67,8 +67,6 @@ app.post('/short', async(req,res) =>{
         longurl : req.body.longurl,
         shorturl : random
     })
-    //console.log(db.long_url);
-    
     res.send(`success `);
 });
 
